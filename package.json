@@ -1,0 +1,13 @@
+{
+  "name": "cole",
+  "version": "1.0.0",
+  "dependencies": {
+    "eslint": "^3.0.1",
+    "pug": "^2.0.0-beta3"
+  },
+  "scripts": {
+    "start": "jade -P . -o dist",
+    "watch": "jade -wP . -o dist"
+  },
+  "author": "Cole Ellison"
+}
