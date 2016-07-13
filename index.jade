@@ -10,3 +10,13 @@ html
       div
         div
         #bigger
+  script
+    $('#button').click(function(e) {
+    $('body').prepend('<div id="drop"></div>')
+      setTimeout(function() {
+        $('#drop').addClass('open')
+      }, 10);
+      setTimeout(function() {
+         $('#drop').remove()
+      }, 2700);
+    })
