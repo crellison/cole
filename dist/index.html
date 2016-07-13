@@ -14,4 +14,10 @@
       </div>
     </button>
   </body>
+  <script>
+    $('#button').click(function(e) {
+    $('body').prepend('<div id="drop"></div>')
+    <setTimeout function() { $('#drop').addClass('open') } 10></setTimeout>
+    <setTimeout function() { $('#drop').remove() } 2700></setTimeout>})
+  </script>
 </html>
