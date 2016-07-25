@@ -1,29 +1,78 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Ripple Button</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="static/bootstrap.readable.min.css">
-    <link rel="stylesheet" href="static/style.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  </head>
+  <head></head>
+  <title>Crypto</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="static/bootstrap.readable.min.css">
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="static/hightlight.default.min.css">
+  <script src="static/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <body>
-    <button id="button" class="btn btn-lg btn-primary">
-      <div>
-        <div></div>
-        <div id="bigger"></div>
+    <div class="container">
+      <div class="row-xs-10 row-xs-offset-1">
+        <div class="title">
+          <h1>Small Python Cyphers</h1>
+          <h4>by Cole</h4>
+        </div>
+        <p>The definition of a cypher is a function which takes a message and a key and returns a predictable, unique output based on the message which can be reversed with the original key given. The functions on this page are designed to demonstrate these principles and show the variety of basic cyphers and how to crack them.</p>
+        <p>As I find time, I will update this site with more advanced algorithms and cryptography techniques. If you want to learn more about advanced cryptography techniques, I highly recommend <a href="cryptopals.com">Cryptopals</a>.</p>
+        <div class="cyphers">
+          <div class="oneCypher">
+            <h4>The Caesar Cypher</h4>
+            <p>This is the classic (and possibly the oldest) cyper using the Roman alphabet. Supposedly used by the Emperor of Rome himself to send messages between generals during battle, this cypher is easy to conceive and implement, though provides virtually no security from hacking. It is implemented by a 'frameshift' transformation of the alphabet by an integer between 0 (the trivial case) and 25. This cypher ignores all non-alpha characters, as the romans didn't have punctuation and spacing between words was non-standard.</p>
+            <p class="solution">click the box to reveal solution</p>
+            <pre><code class="python">def caesarEncrypt(msg,key):
+  msg = msg.lower()
+  #get the character code for a, we will use this as a baseline to select characters
+  start = ord('a') 
+  rVal = ''
+  for ch in msg:
+    # if character is a letter, use the frameshift, otherwise use the character
+    rVal += chr(start + (ord(ch) - start + key) % 26) if ch.isalpha() else ''
+  return rVal</code></pre>
+            <p>The decrypt for the caesar cypher is as simple as it's encryption. All we need to do is change the direction of the frameshift.</p>
+            <p class="solution">click the box to reveal solution</p>
+            <pre><code class="python">def caesarDecrypt(msg,key):
+  msg = msg.lower()
+  #get the character code for a, we will use this as a baseline to select characters
+  start = ord('a') 
+  rVal = ''
+  for ch in msg:
+    # in this line, all we change is the sign before 'key'
+    rVal += chr(start + (ord(ch) - start - key) % 26) if ch.isalpha() else ''
+  return rVal</code></pre>
+            <p>Should you want to break this without the key, it will require some basic frequency analysis. To do this, we will need a large text document. Though many are available online through <a href="gutenburg.org">Project Gutenburg</a>, I (and many programmers) have a soft spot for Lewis Carrol's <a href="http://www.gutenberg.org/cache/epub/11/pg11.txt">Alice in Wonderland</a>, so my implementation will use that. First we need to build a function that reads a .txt file and generate a frequency table for character frequencies. The more advanced version of this table just looks at character pairing frequencies (i.e. the frequency at which 'ae' appears), but I will leave that to you to implement on your free time for fun!</p>
+            <p class="solution">click the box to reveal solution</p>
+            <pre><code class="python"># get character frequencies of large text doc (alice.txt)
+def getFrq(filename):
+  freq = {}
+  total = 0
+  with open(filename) as file:
+    while True:
+      c = file.read(1)
+      if not c: # then we have reached the end of the document
+        break
+      total+=1
+      # if c hasn't appeared yet, instantiate it
+      freq[c] = 1 if not c in freq.keys() else freq[c]+1
+  for key in freq.keys():
+    freq[key]/=total
+  return freq</code></pre>
+            <pre><code class="no-highlight"><sub>For those of you who implemented the character pairing analysis on alice.txt, here are some pairing to test against your output: {'ha': 0.009722470613100947, 'oh': 0.00037394117742695955, 'ex': 0.0009917570357845448, 'oi': 0.0009917570357845448, 'ek': 0.00011380818443429204, 'gn': 9.754987237225031e-05, 'cc': 0.00029264961711675095}</sub></code></pre>
+          </div>
+        </div>
       </div>
-    </button>
+    </div>
+    <script>
+      $('pre').click(function(e) {
+      console.log('clicked')
+      console.log(e)
+      $(e.target).children().css('visibility','visible')
+      $(e.target).prev().remove()
+      })
+    </script>
   </body>
-  <script>
-    $('#button').click(function(e) {
-    $('body').prepend('<div id="drop"></div>')
-    setTimeout(function() {
-    $('#drop').addClass('open')
-    }, 10)
-    setTimeout(function() {
-    $('#drop').remove()
-    }, 2700)
-    })
-  </script>
 </html>
