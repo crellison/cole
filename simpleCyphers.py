@@ -1,5 +1,7 @@
 import sys
 
+
+
 # encrypts a message using a caesar cypher with a given key
 def caesarEncrypt(msg,key):
   msg = msg.lower()
@@ -7,7 +9,7 @@ def caesarEncrypt(msg,key):
   start = ord('a') 
   rVal = ''
   for ch in msg:
-    rVal += chr(start + (ord(ch)-start+key)%26) if ch.isalpha() else ''
+    rVal += chr(start + (ord(ch)-start+int(key))%26) if ch.isalpha() else ''
   print(rVal)
   return rVal
 
@@ -36,16 +38,17 @@ def pairFrq(filename):
 			if not c:
 				break
 			if not c.isalpha():
-				last = False
+				# last = False
 				continue
 			c = c.lower()
 			if total and last:
 				freq[last+c] = 1 if not last+c in freq.keys() else freq[last+c]+1
 			total+=1
 			last = c
-			print(total)
 	for key in freq.keys():
 		freq[key]/=total
+	examples = ['ae','qu','po','rs','ek','gn','cc']
+	for pair in examples: print(freq[pair])
 	return freq
 
 # gets character frequencies for a string
@@ -58,6 +61,18 @@ def getStringFrq(string):
 	for key in freq.keys():
 		freq[key]/=total
 	return freq
+
+# open a file
+# encrypt each line with given cypher and key
+# append each line to end of file
+def writeEncrypt(filename,encryption,key):
+	file = open(filename, 'r')
+	target = open(filename, 'a')
+	target.write('\n')
+	for line in file:
+		target.write(globals()[encryption](line,key))
+		target.write('\n')
+	file.close()
 
 if __name__ == '__main__':
 	if len(sys.argv)<2:

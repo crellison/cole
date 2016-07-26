@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 
-body, h1, h2, h3, h4, h5, h6, p, input, code {
+body, h1, h2, h3, h4, h5, h6, p, input, code, pre {
   font-family: 'Inconsolata', Courier;
   color: #2e2e2e;
 }
 
 body {
 	background: #e2e2e2;
+}
+
+code {
+	word-break: break-word;
 }
 
 code.python {
@@ -17,6 +21,7 @@ code.python {
 .title {
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
   border-bottom: 1px solid #2e2e2e;
   margin-bottom: 20px;
 }
@@ -25,9 +30,25 @@ code.python {
   margin-left: 15px;
 }
 
+.flex {
+	display: flex;
+	align-items: baseline;
+}
+
 .solution {
+	z-index: -10;
 	margin-left: 15px;
-	margin-bottom: -30px;
+	margin-bottom: -40px;
 	color: #c4c4c4;
-	margin-top: 19px;
+	margin-top: 29px;
+	-webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.git {
+	height: 25px;
 }
