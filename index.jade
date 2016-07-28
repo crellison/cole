@@ -30,7 +30,7 @@ html
         .cyphers
           .oneCypher
             h4 The Caesar Cypher
-            p This is the classic (and possibly the oldest) cypher using the Roman alphabet. Supposedly used by the Emperor of Rome himself to send messages between generals during battle, this cypher is easy to conceive and implement, though provides virtually no security from hacking. It is implemented by a 'frameshift' transformation of the alphabet by an integer between 0 (the trivial case) and 25. Though not required, my version of this cypher ignores all non-alpha characters, as the romans didn't have punctuation and spacing between words was non-standard.
+            p This is the classic (and possibly the oldest) cypher using the Roman alphabet. Supposedly used by the Emperor of Rome himself to send messages between generals during battle, this cypher is easy to conceive and implement, though provides virtually no security from hacking. It is implemented by a 'frameshift' transformation of the alphabet by an integer between 0 (the trivial case) and 25. If you want to stay in keeping with the roman tradition, your version of this cypher can ignore all non-alpha characters, as the romans didn't have punctuation and spacing between words was non-standard (this can make decoding more annoying though).
             p.solution click the box to reveal solution
             pre
               code.python
@@ -41,7 +41,7 @@ html
                 |   rVal = ''
                 |   for ch in msg:
                 |     # if character is a letter, use the frameshift, otherwise use the character
-                |     rVal += chr(start + (ord(ch) - start + key) % 26) if ch.isalpha() else ''
+                |     rVal += chr(start + (ord(ch) - start + key) % 26) if ch.isalpha() else ch
                 |   return rVal
             p The decrypt for the caesar cypher is as simple as it's encryption. All we need to do is change the direction of the frameshift. Pass in the negation key value and you will get your original message! No need for a separate function!
             p Now we will get a little more advanced. Say you find a scrap of paper, or intercept an email, and suspect the contents are encrypted with a caesar cypher. If you want to break this without the key (and without printing out the 26 possible options), it will require some basic frequency analysis. To do this, we will need a large text document. Though many are available online through 
@@ -81,7 +81,33 @@ html
             p Now that we have our character frequencies, or character pair frequencies, we can go about testing various outputs against some encrypted strings. Of course, such tests work poorly against short excerpts, as character frequency works best with a larger pool of data. Download 
               a(href="txt/caesarEncrypted.txt") this file
               |  and read it's contents as the argument to your decryption algorithm for the caesar cypher.
-            p To go about the actual decryption, you will need to write a function that opens the the text file, decrypts the file using each of the 23 possible keys, selects the iterations which most closely reflect your results from the character frequencies of Alice in Wonderland, and then returns the best 2 or 3 matches. 
+            p To go about the actual decryption, you will need to write a function that opens the the text file, decrypts the file using each of the 23 possible keys, selects the iterations which most closely reflect your results from the character frequencies of Alice in Wonderland, and then returns the best 2 or 3 matches. Alternatively, you can score the answers based on the difference in character frequencies and print the solution if it is below a certain threshold.
+            p.solution click the box to reveal solution
+            pre
+              code.python
+                | def decryptFile(filename):
+                |   # open the file and change it to a string
+                |   with open(filename, 'r') as myfile:
+                |    data=myfile.read().replace('\n', '') 
+                |  # get character (pair) frequencies from a large text doc
+                |  nativeFrq = pairFrq('dist/txt/alice.txt')
+                |  # decrypt for each key in the possible keys
+                |  for i in range(1,26): 
+                |    temp = caesarEncrypt(data,-i)
+                |    freq = pairStringFrq(temp)
+                |    score = 0
+                |    # decide how to score each translated message
+                |    for key in freq.keys():
+                |      if key in nativeFrq.keys():
+                |        score+=abs(freq[key] - nativeFrq[key])
+                |      else:
+                |        score+=0.1
+                |    # choose a score limit to filter output
+                |    if score < 1:
+                |      print('score: {}'.format(score))
+                |      print('key: {}'.format(i))
+                |      print(temp)
+                |      print('\n')
     script.
 
       $('pre').click(function(e) {

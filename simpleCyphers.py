@@ -9,8 +9,8 @@ def caesarEncrypt(msg,key):
   start = ord('a') 
   rVal = ''
   for ch in msg:
-    rVal += chr(start + (ord(ch)-start+int(key))%26) if ch.isalpha() else ''
-  print(rVal)
+    rVal += chr(start + (ord(ch)-start+int(key))%26) if ch.isalpha() else ch
+  # print(rVal)
   return rVal
 
 # gets character frequencies for a file
@@ -48,7 +48,19 @@ def pairFrq(filename):
 	for key in freq.keys():
 		freq[key]/=total
 	examples = ['ae','qu','po','rs','ek','gn','cc']
-	for pair in examples: print(freq[pair])
+	# for pair in examples: print(freq[pair])
+	return freq
+
+def pairStringFrq(string):
+	freq = {}
+	total = 0
+	for i in range(len(string)-1):
+		if not (string[i].isalpha() and string[i+1].isalpha()):
+			continue
+		total+=1
+		freq[string[i:i+2]] = 1 if not string[i:i+2] in freq.keys() else freq[string[i:i+2]]+1
+	for key in freq.keys():
+		freq[key]/=total
 	return freq
 
 # gets character frequencies for a string
@@ -60,14 +72,39 @@ def getStringFrq(string):
 		freq[char] = 1 if not char in freq.keys() else freq[char]+1
 	for key in freq.keys():
 		freq[key]/=total
-	return freq
+	return freq	
+
+def decryptFile(filename,encryption):
+   # open the file and change it to a string
+  with open(filename, 'r') as myfile:
+    data=myfile.read().replace('\n', '') 
+  # get character (pair) frequencies from a large text doc
+  nativeFrq = pairFrq('dist/txt/alice.txt')
+  # decrypt for each key in the possible keys
+  for i in range(1,26): 
+    temp = globals()[encryption](data,-i)
+    freq = pairStringFrq(temp)
+    score = 0
+    # decide how to score each translated message
+    for key in freq.keys():
+      if key in nativeFrq.keys():
+        score+=abs(freq[key] - nativeFrq[key])
+      else:
+        score+=0.1
+    # choose a score limit to filter output
+    if score < 1:
+      print('score: {}'.format(score))
+      print('key: {}'.format(i))
+      print(temp)
+      print('\n')
+
 
 # open a file
 # encrypt each line with given cypher and key
 # append each line to end of file
-def writeEncrypt(filename,encryption,key):
-	file = open(filename, 'r')
-	target = open(filename, 'a')
+def writeEncrypt(file1,file2,encryption,key):
+	file = open(file1, 'r')
+	target = open(file2, 'w')
 	target.write('\n')
 	for line in file:
 		target.write(globals()[encryption](line,key))
