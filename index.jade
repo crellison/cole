@@ -141,6 +141,7 @@ html
                 |   string = ''.join([('000'+bin(keyString.index(char))[2:])[-6:] for char in string ])
                 |   # convert each binary block into its respective character code
                 |   return ''.join([chr(int(string[i:i+8], 2)) for i in range(0, len(string), 8)])
+            p For most future uses, you will probably want to look at the base64, binascii, and codecs Python libraries for parsing between string, binary, hex, and base64 data types. Each are better at different applications, and I have found using a mixture of the three is usually best for my purposes. However, don't feel confined to these libraries. Now that you made a converter between base64 and raw text, you have the skills to build your own library for navigating a large variety of different encodings.
 
     script.
       $('.oneCypher').click(function(e) {
