@@ -1,7 +1,5 @@
 import sys
 
-
-
 # encrypts a message using a caesar cypher with a given key
 def caesarEncrypt(msg,key):
   msg = msg.lower()
@@ -98,6 +96,11 @@ def decryptFile(filename,encryption):
       print(temp)
       print('\n')
 
+def stringTo64(string):
+	string = '0' + bin(int.from_bytes(string.encode(), 'big'))[2:]
+	while (len(string))%24:
+		string+='00000000'
+	print([for i in range(len(string)/6): string[i]])
 
 # open a file
 # encrypt each line with given cypher and key

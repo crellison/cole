@@ -29,7 +29,9 @@ html
           | .
         .cyphers
           .oneCypher
-            h4 The Caesar Cypher
+            a(href='#')
+              h4 The Caesar Cypher
+          .exercises.hide
             p This is the classic (and possibly the oldest) cypher using the Roman alphabet. Supposedly used by the Emperor of Rome himself to send messages between generals during battle, this cypher is easy to conceive and implement, though provides virtually no security from hacking. It is implemented by a 'frameshift' transformation of the alphabet by an integer between 0 (the trivial case) and 25. If you want to stay in keeping with the roman tradition, your version of this cypher can ignore all non-alpha characters, as the romans didn't have punctuation and spacing between words was non-standard (this can make decoding more annoying though).
             p.solution click the box to reveal solution
             pre
@@ -85,7 +87,7 @@ html
             p.solution click the box to reveal solution
             pre
               code.python
-                | def decryptFile(filename):
+                | def decryptCaesarFile(filename):
                 |   # open the file and change it to a string
                 |   with open(filename, 'r') as myfile:
                 |    data=myfile.read().replace('\n', '') 
@@ -108,10 +110,27 @@ html
                 |      print('key: {}'.format(i))
                 |      print(temp)
                 |      print('\n')
+        .cyphers
+          .oneCypher
+            a(href='#')
+              h4 Base64
+          .exercises.hide
+            p Congratulations on getting past the first cypher. Now we will move more into some basic tools used to hide and obfuscate data. Base64, while not a cypher, is a common operation and one you should have in your toolkit of cypher cracking. Base64ing binary is a common way to decrease the size of a file, allowing for the easy transportation of large amounts of data. Email attachments, for example, are base64ed (and usually encrypted as well). There are Python libraries that do this conversion for you, but try it yourself so you understand what is really going on.
+            p.solution click the box to reveal solution
+            pre
+              code.python
+                | def stringTo64(string):
+                |   
     script.
-
+      $('.oneCypher').click(function(e) {
+      e.preventDefault()
+      $(e.target).parent().parent().next().toggleClass('hide')
+      })
       $('pre').click(function(e) {
-      console.log('clicked')
       $(e.target).children().css('visibility','visible')
       $(e.target).prev().remove()
+      })
+      $('.solution').click(function(e) {
+      $(e.target).next().children().css('visibility','visible')
+      $(e.target).remove()
       })

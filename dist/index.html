@@ -23,8 +23,9 @@
         <p>Cryptography is commonly taught in early CS courses, as such problems present unique challenges in function architecture. Cyphers are reversible functions which take a message and a key and return a predictable, unique output based on the message. The reversability and uniqueness is key. A cypher without uniqueness is useless, as that would imply that the encryption of "quavering peaches" would be the same as that of "bobbing buoy." If we have uniqueness, but no reversibility, then the algorithm is a hash function, instead of an encryption algorithm, and it is impossible to divine the original message from the encrypted one. The functions on this page are designed to demonstrate these principles and show the variety of basic cyphers and how to crack them. A word of advice though, none of the encryptions on this page are secure (in any form of the word) to someone with access to a computer and some basic algebra skills. </p>
         <p>As I find time, I will update this site with more advanced algorithms and cryptography techniques. If you want to learn more about advanced cryptography techniques, I highly recommend <a href="cryptopals.com">Cryptopals</a>.</p>
         <div class="cyphers">
-          <div class="oneCypher">
-            <h4>The Caesar Cypher</h4>
+          <div class="oneCypher"><a href="#">
+              <h4>The Caesar Cypher</h4></a></div>
+          <div class="exercises hide">
             <p>This is the classic (and possibly the oldest) cypher using the Roman alphabet. Supposedly used by the Emperor of Rome himself to send messages between generals during battle, this cypher is easy to conceive and implement, though provides virtually no security from hacking. It is implemented by a 'frameshift' transformation of the alphabet by an integer between 0 (the trivial case) and 25. If you want to stay in keeping with the roman tradition, your version of this cypher can ignore all non-alpha characters, as the romans didn't have punctuation and spacing between words was non-standard (this can make decoding more annoying though).</p>
             <p class="solution">click the box to reveal solution</p>
             <pre><code class="python">def caesarEncrypt(msg,key):
@@ -66,7 +67,7 @@ def getFrq(filename):
             <p>Now that we have our character frequencies, or character pair frequencies, we can go about testing various outputs against some encrypted strings. Of course, such tests work poorly against short excerpts, as character frequency works best with a larger pool of data. Download <a href="txt/caesarEncrypted.txt">this file</a> and read it's contents as the argument to your decryption algorithm for the caesar cypher.</p>
             <p>To go about the actual decryption, you will need to write a function that opens the the text file, decrypts the file using each of the 23 possible keys, selects the iterations which most closely reflect your results from the character frequencies of Alice in Wonderland, and then returns the best 2 or 3 matches. Alternatively, you can score the answers based on the difference in character frequencies and print the solution if it is below a certain threshold.</p>
             <p class="solution">click the box to reveal solution</p>
-            <pre><code class="python">def decryptFile(filename):
+            <pre><code class="python">def decryptCaesarFile(filename):
   # open the file and change it to a string
   with open(filename, 'r') as myfile:
    data=myfile.read().replace('\n', '') 
@@ -91,13 +92,30 @@ def getFrq(filename):
      print('\n')</code></pre>
           </div>
         </div>
+        <div class="cyphers">
+          <div class="oneCypher"><a href="#">
+              <h4>Base64</h4></a></div>
+          <div class="exercises hide">
+            <p>Congratulations on getting past the first cypher. Now we will move more into some basic tools used to hide and obfuscate data. Base64, while not a cypher, is a common operation and one you should have in your toolkit of cypher cracking. Base64ing binary is a common way to decrease the size of a file, allowing for the easy transportation of large amounts of data. Email attachments, for example, are base64ed (and usually encrypted as well). There are Python libraries that do this conversion for you, but try it yourself so you understand what is really going on.</p>
+            <p class="solution">click the box to reveal solution</p>
+            <pre><code class="python">def stringTo64(string):
+  </code></pre>
+          </div>
+        </div>
       </div>
     </div>
     <script>
+      $('.oneCypher').click(function(e) {
+      e.preventDefault()
+      $(e.target).parent().parent().next().toggleClass('hide')
+      })
       $('pre').click(function(e) {
-      console.log('clicked')
       $(e.target).children().css('visibility','visible')
       $(e.target).prev().remove()
+      })
+      $('.solution').click(function(e) {
+      $(e.target).next().children().css('visibility','visible')
+      $(e.target).remove()
       })
     </script>
   </body>
