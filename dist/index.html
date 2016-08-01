@@ -94,12 +94,28 @@ def getFrq(filename):
         </div>
         <div class="cyphers">
           <div class="oneCypher"><a href="#">
-              <h4>Base64</h4></a></div>
+              <h4>MIME encoding</h4></a></div>
           <div class="exercises hide">
-            <p>Congratulations on getting past the first cypher. Now we will move more into some basic tools used to hide and obfuscate data. Base64, while not a cypher, is a common operation and one you should have in your toolkit of cypher cracking. Base64ing binary is a common way to decrease the size of a file, allowing for the easy transportation of large amounts of data. Email attachments, for example, are base64ed (and usually encrypted as well). There are Python libraries that do this conversion for you, but try it yourself so you understand what is really going on.</p>
+            <p>Congratulations on getting past the first cypher. Now we will move more into some basic tools used to hide and obfuscate data. MIME encoding (Base64), while not a cypher, is a common operation and one you should have in your toolkit of cypher cracking. Base64ing binary is a common way to transfer binary data that converts it to plain text, allowing for the easy transportation of large amounts of data. Virtually all email are sent with MIME encoding. There are Python libraries that do this conversion for you, but try it yourself so you understand what is really going on. MIME doesn't use direct ASCII codes to convert binary to a string, so you will need to use the key provided below in your encryption. To know that you have implemented correctly, try passing 'hello, world' into your function. If you get 'aGVsbG8sIHdvcmxk' as the output, you have completed the function.</p>
+            <pre><code class="no-highlight"></code>keyString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'</pre>
             <p class="solution">click the box to reveal solution</p>
-            <pre><code class="python">def stringTo64(string):
-  </code></pre>
+            <pre><code class="python">def MIMEencodeFromString(string):
+  keyString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+  # convert string into binary, excluding the 'b' inserted
+  string = '0' + bin(int.from_bytes(string.encode(), 'big'))[2:]
+  # add empty characters while necessary to fill out data
+  while (len(string)) % 24:
+    string +='00000000'
+  # parse each six characters into base 10, and take correct character from the key
+  return ''.join([keyString[int(string[i : i + 6],2)] for i in range(0, len(string), 6)])</code></pre>
+            <p>Now that you have the encode function, the decode function shouldn't be too  complicated.</p>
+            <p class="solution">click the box to reveal solution</p>
+            <pre><code class="python">def MIMEdecodeToString(string):
+  keyString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+  # convert characters of base64 string into binary and join into one string
+  string = ''.join([('000'+bin(keyString.index(char))[2:])[-6:] for char in string ])
+  # convert each binary block into its respective character code
+  return ''.join([chr(int(string[i:i+8], 2)) for i in range(0, len(string), 8)])</code></pre>
           </div>
         </div>
       </div>

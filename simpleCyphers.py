@@ -1,5 +1,9 @@
 import sys
 
+#################################################
+# CAESAR CYPHER
+#################################################
+
 # encrypts a message using a caesar cypher with a given key
 def caesarEncrypt(msg,key):
   msg = msg.lower()
@@ -96,11 +100,26 @@ def decryptFile(filename,encryption):
       print(temp)
       print('\n')
 
-def stringTo64(string):
+#################################################
+# MIME ENCODING
+#################################################
+
+def MIMEencodeFromString(string):
+	keyString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	# convert string into binary, excluding the 'b' inserted
 	string = '0' + bin(int.from_bytes(string.encode(), 'big'))[2:]
-	while (len(string))%24:
-		string+='00000000'
-	print([for i in range(len(string)/6): string[i]])
+	# add empty characters while necessary to fill out data
+	while (len(string)) % 24:
+		string +='00000000'
+	# parse each six characters into base 10, and take correct character from the key
+	print(''.join([keyString[int(string[i : i + 6],2)] for i in range(0, len(string), 6)]))
+
+def MIMEdecodeToString(string):
+	keyString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	# convert characters of base64 string into binary and join into one string
+	string = ''.join([('000'+bin(keyString.index(char))[2:])[-6:] for char in string ])
+	# convert each binary block into its respective character code
+	return ''.join([chr(int(string[i:i+8], 2)) for i in range(0, len(string), 8)])
 
 # open a file
 # encrypt each line with given cypher and key
