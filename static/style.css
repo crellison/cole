@@ -9,6 +9,11 @@ body {
 	background: #e2e2e2;
 }
 
+a, a:hover, a:focus, a:visited, a:active {
+	text-decoration: none;
+	outline: none;
+}
+
 code {
 	word-break: break-word;
 }
@@ -16,6 +21,10 @@ code {
 code.python {
 	visibility: hidden;
 	z-index: 100;
+}
+
+.hide {
+	display: none;
 }
 
 .title {
@@ -47,6 +56,7 @@ code.python {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  cursor: default;
 }
 
 .git {
